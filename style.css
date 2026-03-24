@@ -5,6 +5,10 @@
 html, body {
     margin: 0;
     font-family: system-ui;
+    user-select: none; /* Standard syntax */
+    -webkit-user-select: none; /* Safari, Chrome, Opera, Android */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer, Edge */
 }
 
 #viewport {
@@ -13,6 +17,8 @@ html, body {
     overflow: hidden;
     background: #1a1a1a;
     cursor: grab;
+    touch-action: none;
+    position: relative;
 }
 
 #grid-container {
@@ -22,6 +28,7 @@ html, body {
     gap: 2px;
     transform-origin: 0 0;
     will-change: transform;
+    position: absolute;
 }
 
 .cell {
