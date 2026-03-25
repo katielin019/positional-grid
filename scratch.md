@@ -1,6 +1,6 @@
-- TODO: add a reset / return to home button?
+- ~~add a reset / return to home button?~~
     - needs to be sticky (?)
-    - positioned over the grid (z-index)
+    - ~~positioned over the grid (z-index)~~
     - should i center it at the origin of the grid? or start it somewhere random? (instead of at the top left cell)
         - should i use local browser storage to track what cells have been visited / interacted with?
 - think about / look into windowing and virtualization for performance optimization

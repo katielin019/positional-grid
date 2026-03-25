@@ -26,7 +26,7 @@ viewport.addEventListener("wheel", (e) => {
     e.preventDefault();
 
     if (e.ctrlKey) {
-        const zf = Math.pow(1.1, -e.deltaY * 0.005);
+        const zf = Math.pow(1.2, -e.deltaY * 0.05);
         zoomAtPoint(e.clientX, e.clientY, zf);
     } else {
         state.x -= e.deltaX;
