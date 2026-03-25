@@ -9,7 +9,7 @@ Log entries are inserted and catalogued in reverse chronological order.
 
 ## 2026-03-25
 
-- decided I want 
+- thought about using the [Panzoom library](https://github.com/timmywil/panzoom/blob/main/README.md#Documentation) instead but honestly the documentation wasn't great and I just need to make some small tweaks to my implementation
 
 ## 2026-03-24
 
