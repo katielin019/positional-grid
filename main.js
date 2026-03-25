@@ -17,6 +17,7 @@ let state = {
 for (let i = 0; i < 400; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
+    cell.id = `cell-${i}`;
     cell.innerText = i;
     grid.appendChild(cell);
 }
