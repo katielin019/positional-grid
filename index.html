@@ -1,16 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>positional grid</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="viewport">
         <div id="grid-container">
         </div>
     </div>
-    <script src="main.js"></script>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.6.1/dist/panzoom.min.js"></script>
+    <script>
+        const grid = document.getElementById("grid-container");
+        // const viewport = document.getElementById("viewport");
+
+        // dummy cells
+        for (let i = 0; i < 400; i++) {
+            const cell = document.createElement("div");
+            cell.className = "cell";
+            cell.innerText = i;
+            grid.appendChild(cell);
+        }
+
+        const pz = Panzoom(grid, {
+            minZoom: 0.3,
+            maxZoom: 1.35,
+            beforeWheel: function (e) {
+                const shouldIgnore = !(e.ctrlKey || e.metaKey || e.altKey);
+                return shouldIgnore;
+            },
+        });
+
+        // pz.on("zoom", () => {
+        //     const scale = pz.getTransform().scale;
+        //     // viewport.style.setProperty()
+        // });
+
+        viewport.addEventListener("wheel", (e) => {
+            e.preventDefault();
+
+            const transform = pz.getTransform();
+            const [x, y] = [transform.x, transform.y];
+            let dx = e.deltaX, dy = e.deltaY;
+
+            if (e.shiftKey) dx = 0;
+
+            pz.moveTo(x - dx, y - dy);
+        })
+
+    </script>
 </body>
+
 </html>
