@@ -12,7 +12,7 @@ let state = {
     initialPinchScale: 1,
 };
 
-// dummy cells
+// DUMMY CELLS
 for (let i = 0; i < 400; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
@@ -25,16 +25,11 @@ viewport.addEventListener("wheel", (e) => {
     e.preventDefault();
 
     if (e.ctrlKey) {
-        // pinch gesture -> ZOOM
-        const delta = -e.deltaY;
-        const zFactor = Math.pow(1.1, delta / 100);  // smooth exponential zoom
-        zoomAtPoint(e.clientX, e.clientY, zFactor);
-        
+        const zf = Math.pow(1.1, -e.deltaY * 0.005);
+        zoomAtPoint(e.clientX, e.clientY, zf);
     } else {
-        // two-finger swipe -> PAN
         state.x -= e.deltaX;
         state.y -= e.deltaY;
-
         update();
     }
 }, { passive: false });
@@ -82,7 +77,7 @@ window.addEventListener("pointerup", () => {
 
 // === MOBILE PINCH-TO-ZOOM ===
 viewport.addEventListener("touchmove", (e) => {
-    e.preventDefault();     // stop page bounce
+    e.preventDefault(); // stop page bounce
 
     if (e.touches.length === 2) {
         // PINCH-TO-ZOOM
@@ -92,8 +87,8 @@ viewport.addEventListener("touchmove", (e) => {
 
         // calculate how much the distance has changed since the last frame
         if (state.initialPinchDist > 0) {
-            const zFactor = dist / state.initialPinchDist;
-            zoomAtPoint(midX, midY, zFactor);
+            const zf = dist / state.initialPinchDist;
+            zoomAtPoint(midX, midY, zf);
         }
 
         // const factor = dist / state.initialPinchDist;
@@ -120,13 +115,13 @@ viewport.addEventListener("touchmove", (e) => {
 }, { passive: false });
 
 viewport.addEventListener("touchstart", (e) => {
-    if (e.touches.length === 1) {
+    if (e.touches.length === 2) {
+        state.isPanning = false; // stop panning when pinching
+        state.initialPinchDist = getDistance(e.touches);
+        state.initialPinchScale = state.scale; // store scale at start of pinch
+    } else if (e.touches.length === 1) {
         state.lastMouseX = e.touches[0].clientX;
         state.lastMouseY = e.touches[0].clientY;
-    } else if (e.touches.length === 2) {
-        // state.isPanning = false;    // stop panning when pinching
-        state.initialPinchDist = getDistance(e.touches);
-        // state.initialPinchScale = state.scale;
     }
 });
 
