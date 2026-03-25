@@ -1,5 +1,6 @@
 const viewport = document.getElementById("viewport");
 const grid = document.getElementById("grid-container");
+const reset = document.getElementById("reset-btn");
 
 let state = {
     scale: 1,
@@ -85,19 +86,14 @@ viewport.addEventListener("touchmove", (e) => {
         const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
 
-        // calculate how much the distance has changed since the last frame
-        if (state.initialPinchDist > 0) {
-            const zf = dist / state.initialPinchDist;
-            zoomAtPoint(midX, midY, zf);
-        }
+        // what the scale should be based on start of gesture
+        const factor = dist / state.initialPinchDist;
+        const targetScale = state.initialPinchScale * factor;
 
-        // const factor = dist / state.initialPinchDist;
-        // const targetScale = state.initialPinchScale * factor;
-        // const deltaFactor = targetScale / state.scale;
+        // how much we need to multiply current scale by to reach target
+        const deltaFactor = targetScale / state.scale;
 
-        // zoomAtPoint(midX, midY, deltaFactor);
-        state.initialPinchDist = dist;  // update for next move frame
-        // state.initialPinchScale = state.scale
+        zoomAtPoint(midX, midY, deltaFactor);
     } else if (e.touches.length === 1) {
         // SINGLE FINGER PAN
         const touch = e.touches[0];
@@ -116,10 +112,11 @@ viewport.addEventListener("touchmove", (e) => {
 
 viewport.addEventListener("touchstart", (e) => {
     if (e.touches.length === 2) {
-        state.isPanning = false; // stop panning when pinching
+        state.isPanning = false; // stop panning when pinching (switch to zoom mode)
         state.initialPinchDist = getDistance(e.touches);
         state.initialPinchScale = state.scale; // store scale at start of pinch
     } else if (e.touches.length === 1) {
+        state.isPanning = true; // start panning
         state.lastMouseX = e.touches[0].clientX;
         state.lastMouseY = e.touches[0].clientY;
     }
@@ -137,3 +134,20 @@ function getDistance(touches) {
 function update() {
     grid.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
 }
+
+// === RESET BUTTON ===
+reset.addEventListener("click", () => {
+    grid.classList.add("smooth-transition");
+
+    // reset internal state
+    state.scale = 1;
+    state.x = 0;
+    state.y = 0;
+
+    update();
+
+    // remove transition class once animation finishes (500ms)
+    setTimeout(() => {
+        grid.classList.remove("smooth-transition");
+    }, 500);
+});
